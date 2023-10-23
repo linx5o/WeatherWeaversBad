@@ -1,0 +1,53 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+class GetWeatherInteractor implements GetWeatherInputBoundary {
+    + execute(cityName: String): Weather
+    + findWeatherByCityName(cityName: String): Weather
+}
+
+class Weather {
+    - cityName: String
+    - time: dateTime
+    - temperature: Double
+    - humidity: Double
+    - pressure: Double
+    - windSpeed: Double
+    - windDegree: Double
+    - weatherDescription: String
+
+    + getCityName(): String
+    + getTime(): dateTime
+    + getTemperature(): Double
+    + getHumidity(): Double
+    + getPressure(): Double
+    + getWindSpeed(): Double
+    + getWindDegree(): Double
+    + getWeatherDescription(): String
+    + setCityName(cityName: String): void
+    + setTime(time: dateTime): void
+    + setTemperature(temperature: Double): void
+    + setHumidity(humidity: Double): void
+    + setPressure(pressure: Double): void
+    + setWindSpeed(windSpeed: Double): void
+    + setWindDegree(windDegree: Double): void
+    + setWeatherDescription(weatherDescription: String): void
+}
+
+Weather <-- GetWeatherInteractor
+
+interface WeatherInterface {
+    + getCityName(): String
+    + getTemperature(): Double
+    + getHumidity(): Double
+    + getPressure(): Double
+    + getWindSpeed(): Double
+    + getWindDegree(): Double
+    + getWeatherDescription(): String
+}
+
+WeatherInterface <-- GetWeatherInteractor
+
+
+
+@enduml
