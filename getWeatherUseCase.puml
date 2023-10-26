@@ -1,53 +1,75 @@
 @startuml
 'https://plantuml.com/sequence-diagram
 
-class GetWeatherInteractor implements GetWeatherInputBoundary {
-    + execute(cityName: String): Weather
-    + findWeatherByCityName(cityName: String): Weather
+'Entity Layer
+
+
+
+package "entity" #dedede{
+    class Weather {
+        - cityName: String
+        - time: dateTime
+        - temperature: Double
+        - humidity: Double
+        - pressure: Double
+        - windSpeed: Double
+        - windDegree: Double
+        - weatherDescription: String
+
+        + getter and setter methods ()
+    }
 }
 
-class Weather {
-    - cityName: String
-    - time: dateTime
-    - temperature: Double
-    - humidity: Double
-    - pressure: Double
-    - windSpeed: Double
-    - windDegree: Double
-    - weatherDescription: String
+'Application Layer
 
-    + getCityName(): String
-    + getTime(): dateTime
-    + getTemperature(): Double
-    + getHumidity(): Double
-    + getPressure(): Double
-    + getWindSpeed(): Double
-    + getWindDegree(): Double
-    + getWeatherDescription(): String
-    + setCityName(cityName: String): void
-    + setTime(time: dateTime): void
-    + setTemperature(temperature: Double): void
-    + setHumidity(humidity: Double): void
-    + setPressure(pressure: Double): void
-    + setWindSpeed(windSpeed: Double): void
-    + setWindDegree(windDegree: Double): void
-    + setWeatherDescription(weatherDescription: String): void
+package "application" #dedede{
+    class GetWeatherInteractor implements GetWeatherInputBoundary {
+        + execute(cityName: String): Weather
+        + findWeatherByCityName(cityName: String): Weather
+    }
+
+    'GetWeatherInputBoundary -u> Weather
+
+    interface WeatherDataAccessInterface {
+        + getCityName(): String
+        + getTemperature(): Double
+        + getHumidity(): Double
+        + getPressure(): Double
+        + getWindSpeed(): Double
+        + getWindDegree(): Double
+        + getWeatherDescription(): String
+    }
+
+    GetWeatherInteractor --d> WeatherDataAccessInterface
+
+    interface GetWeatherInputBoundary{
+        + execute(cityName: String): Weather
+    }
+
+    interface GetWeatherOutputBoundary {
+        + prepareSuccessView(WeatherOuputData: Weather)
+        + prepareFailView(String: error)
+    }
+
+    GetWeatherInteractor -l> GetWeatherOutputBoundary
+    'GetWeatherOutputBoundary -u> Weather
 }
 
-Weather <-- GetWeatherInteractor
+'data layer
 
-interface WeatherInterface {
-    + getCityName(): String
-    + getTemperature(): Double
-    + getHumidity(): Double
-    + getPressure(): Double
-    + getWindSpeed(): Double
-    + getWindDegree(): Double
-    + getWeatherDescription(): String
+package "data" {
+    class WeatherDataAccessObject {
+        + findWeatherByCityName(cityName: String): Weather
+    }
+
+    class API {
+        Gets the weather "data" from the API for the city
+    }
+
+    WeatherDataAccessObject .|> WeatherDataAccessInterface
+    WeatherDataAccessObject -r> API
 }
 
-WeatherInterface <-- GetWeatherInteractor
-
-
+GetWeatherInteractor -r> Weather
 
 @enduml
