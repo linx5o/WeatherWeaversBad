@@ -11,7 +11,7 @@ public class WeatherView extends JPanel implements ActionListener, PropertyChang
 
     public WeatherView() {
         JFrame frame = new JFrame("Swing Example");
-        frame.setSize(500, 300);
+        frame.setSize(1000, 700);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JButton button = new JButton("Click Me!");
